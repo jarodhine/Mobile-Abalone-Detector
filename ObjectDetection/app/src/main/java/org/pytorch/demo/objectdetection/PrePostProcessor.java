@@ -11,12 +11,10 @@ import android.graphics.Rect;
 import java.util.ArrayList;
 
 class Result {
-    int classIndex;
     Float score;
     Rect rect;
 
-    public Result(int cls, Float output, Rect rect) {
-        this.classIndex = cls;
+    public Result(Float output, Rect rect) {
         this.score = output;
         this.rect = rect;
     }
@@ -48,7 +46,7 @@ public class PrePostProcessor {
             bottom = imgScaleY * bottom;
 
             Rect rect = new Rect((int)(startX+ivScaleX*left), (int)(startY+top*ivScaleY), (int)(startX+ivScaleX*right), (int)(startY+ivScaleY*bottom));
-            Result result = new Result((int)outputs[i* OUTPUT_COLUMN +5], outputs[i* OUTPUT_COLUMN +4], rect);
+            Result result = new Result(outputs[i* OUTPUT_COLUMN +4], rect);
             results.add(result);
         }
         return results;

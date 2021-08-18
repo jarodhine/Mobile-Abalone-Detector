@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -55,7 +56,9 @@ static {
 }
 
     private int mImageIndex = 0;
-    private String[] mTestImages = {"test1.png", "test2.jpg", "test3.png"};
+    private String[] mTestImages = {"5.JPG"};
+
+    private TextView mCountView;
 
     private ImageView mImageView;
     private ResultView mResultView;
@@ -68,6 +71,8 @@ static {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
@@ -85,6 +90,8 @@ static {
             Log.e("Object Detection", "Error reading assets", e);
             finish();
         }
+
+        mCountView = findViewById(R.id.countView);
 
         mImageView = findViewById(R.id.imageView);
         mImageView.setImageBitmap(mBitmap);
@@ -131,45 +138,6 @@ static {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_CANCELED) {
-            switch (requestCode) {
-                case 0:
-                    if (resultCode == RESULT_OK && data != null) {
-                        mBitmap = (Bitmap) data.getExtras().get("data");
-                        Matrix matrix = new Matrix();
-                        matrix.postRotate(90.0f);
-                        mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
-                        mImageView.setImageBitmap(mBitmap);
-                    }
-                    break;
-                case 1:
-                    if (resultCode == RESULT_OK && data != null) {
-                        Uri selectedImage = data.getData();
-                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                        if (selectedImage != null) {
-                            Cursor cursor = getContentResolver().query(selectedImage,
-                                    filePathColumn, null, null, null);
-                            if (cursor != null) {
-                                cursor.moveToFirst();
-                                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                                String picturePath = cursor.getString(columnIndex);
-                                mBitmap = BitmapFactory.decodeFile(picturePath);
-                                Matrix matrix = new Matrix();
-                                matrix.postRotate(90.0f);
-                                mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
-                                mImageView.setImageBitmap(mBitmap);
-                                cursor.close();
-                            }
-                        }
-                    }
-                    break;
-            }
-        }
-    }
-
-    @Override
     public void run() {
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, PrePostProcessor.INPUT_WIDTH, PrePostProcessor.INPUT_HEIGHT, true);
 
@@ -211,14 +179,20 @@ static {
             }
 
             final ArrayList<Result> results = PrePostProcessor.outputsToPredictions(count, outputs, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY);
+            final String stringCount = String.valueOf(count);
 
             runOnUiThread(() -> {
                 mButtonDetect.setEnabled(true);
                 mButtonDetect.setText(getString(R.string.detect));
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                mResultView.setResults(results);
-                mResultView.invalidate();
-                mResultView.setVisibility(View.VISIBLE);
+
+                //Count
+                mCountView.setText(stringCount);
+
+                //Bounding Boxes
+//                mResultView.setResults(results);
+//                mResultView.invalidate();
+//                mResultView.setVisibility(View.VISIBLE);
             });
         }
     }

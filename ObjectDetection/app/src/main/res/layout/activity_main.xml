@@ -7,22 +7,22 @@
     tools:context="org.pytorch.demo.objectdetection.MainActivity">
 
     <TextView
-        android:id="@+id/totalDisplayView"
+        android:id="@+id/runningTotalTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="Running Total:"
+        android:text="@string/running_total"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/totalView"
+        android:id="@+id/runningTotalView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        app:layout_constraintStart_toEndOf="@+id/totalDisplayView"
+        app:layout_constraintStart_toEndOf="@+id/runningTotalTextView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -31,9 +31,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:text="Current Count:"
+        android:text="@string/current_count"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/totalDisplayView" />
+        app:layout_constraintTop_toBottomOf="@+id/runningTotalTextView" />
 
     <TextView
         android:id="@+id/countView"
@@ -42,12 +42,12 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toEndOf="@+id/countDisplayView"
-        app:layout_constraintTop_toBottomOf="@+id/totalView" />
+        app:layout_constraintTop_toBottomOf="@+id/runningTotalView" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="260dp"
-        android:layout_height="260dp"
+        android:layout_width="300dp"
+        android:layout_height="225dp"
         android:layout_marginTop="32dp"
         android:background="#FFFFFF"
         android:contentDescription="@string/image_view"
@@ -58,8 +58,8 @@
 
     <org.pytorch.demo.objectdetection.ResultView
         android:id="@+id/resultView"
-        android:layout_width="260dp"
-        android:layout_height="260dp"
+        android:layout_width="300dp"
+        android:layout_height="225dp"
         android:layout_marginTop="32dp"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +83,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Add Count"
+        android:text="@string/add_count"
         android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@+id/resetButton"
         app:layout_constraintStart_toEndOf="@+id/detectButton"
@@ -94,7 +94,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Reset Total"
+        android:text="@string/reset_total"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/addButton"
