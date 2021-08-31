@@ -44,28 +44,6 @@
         app:layout_constraintStart_toEndOf="@+id/countDisplayView"
         app:layout_constraintTop_toBottomOf="@+id/runningTotalView" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="300dp"
-        android:layout_height="225dp"
-        android:layout_marginTop="32dp"
-        android:background="#FFFFFF"
-        android:contentDescription="@string/image_view"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countDisplayView" />
-
-    <org.pytorch.demo.objectdetection.ResultView
-        android:id="@+id/resultView"
-        android:layout_width="300dp"
-        android:layout_height="225dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countDisplayView" />
-
 
     <Button
         android:id="@+id/detectButton"
@@ -76,7 +54,7 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@+id/addButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/camera_preview" />
 
     <Button
         android:id="@+id/addButton"
@@ -87,7 +65,7 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@+id/resetButton"
         app:layout_constraintStart_toEndOf="@+id/detectButton"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/camera_preview" />
 
     <Button
         android:id="@+id/resetButton"
@@ -98,7 +76,7 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/addButton"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/camera_preview" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -110,5 +88,17 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addButton" />
+
+    <FrameLayout
+        android:id="@+id/camera_preview"
+        android:layout_width="320dp"
+        android:layout_height="240dp"
+        android:layout_marginTop="32dp"
+        android:layout_weight="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countDisplayView" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
