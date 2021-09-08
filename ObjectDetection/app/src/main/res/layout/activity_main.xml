@@ -17,11 +17,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/runningTotalView"
+        android:id="@+id/totalView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
+        android:text="@string/default_value"
         app:layout_constraintStart_toEndOf="@+id/runningTotalTextView"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,8 +42,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
+        android:text="@string/default_value"
         app:layout_constraintStart_toEndOf="@+id/countDisplayView"
-        app:layout_constraintTop_toBottomOf="@+id/runningTotalView" />
+        app:layout_constraintTop_toBottomOf="@+id/totalView" />
 
 
     <Button
@@ -50,10 +52,10 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
         android:text="@string/detect"
         android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@+id/addButton"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/camera_preview" />
 
     <Button
@@ -63,18 +65,29 @@
         android:layout_marginTop="32dp"
         android:text="@string/add_count"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toStartOf="@+id/resetButton"
-        app:layout_constraintStart_toEndOf="@+id/detectButton"
+        app:layout_constraintEnd_toEndOf="@+id/camera_preview"
+        app:layout_constraintStart_toStartOf="@+id/camera_preview"
         app:layout_constraintTop_toBottomOf="@+id/camera_preview" />
+
+    <Button
+        android:id="@+id/discardButton"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/discard_count"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="@+id/addButton"
+        app:layout_constraintStart_toStartOf="@+id/addButton"
+        app:layout_constraintTop_toBottomOf="@+id/addButton" />
 
     <Button
         android:id="@+id/resetButton"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:text="@string/reset_total"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/addButton"
         app:layout_constraintTop_toBottomOf="@+id/camera_preview" />
 
@@ -82,23 +95,28 @@
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addButton" />
+        app:layout_constraintEnd_toEndOf="@+id/detectButton"
+        app:layout_constraintStart_toStartOf="@+id/detectButton"
+        app:layout_constraintTop_toBottomOf="@+id/detectButton" />
 
     <FrameLayout
         android:id="@+id/camera_preview"
-        android:layout_width="320dp"
-        android:layout_height="240dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="240dp"
+        android:layout_height="320dp"
+        android:layout_marginTop="124dp"
         android:layout_weight="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countDisplayView" />
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <org.pytorch.demo.objectdetection.ResultView
+            android:id="@+id/resultView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

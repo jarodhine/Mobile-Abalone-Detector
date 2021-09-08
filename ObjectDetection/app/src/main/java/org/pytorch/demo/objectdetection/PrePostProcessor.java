@@ -26,8 +26,8 @@ public class PrePostProcessor {
     public final static float[] NO_STD_RGB = new float[] {1.0f, 1.0f, 1.0f};
 
     // model input image size
-    public final static int INPUT_WIDTH = 640;
-    public final static int INPUT_HEIGHT = 640;
+    public final static int INPUT_WIDTH = 1280;
+    public final static int INPUT_HEIGHT = 960;
     public final static int OUTPUT_COLUMN = 6; // left, top, right, bottom, score and label
 
     static String[] mClasses;

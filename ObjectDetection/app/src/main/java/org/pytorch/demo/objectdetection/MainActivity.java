@@ -69,16 +69,15 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private Camera mCamera;
     private CameraPreview mPreview;
 
-    private int mImageIndex = 0;
-    private String[] mTestImages = {"5.JPG"};
-
     private TextView mCountView;
-    private ImageView mImageView;
-    private ResultView mResultView;
+    private TextView mTotalView;
 
     private Button mButtonDetect;
     private Button mButtonAdd;
+    private Button mButtonDiscard;
+    private Button mButtonReset;
     private ProgressBar mProgressBar;
+    private ResultView mResultView;
 
     private Bitmap mBitmap = null;
     private Module mModule = null;
@@ -87,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     public static final String TAG = "Camera";
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
+
+    public int totalCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,20 +108,19 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         setContentView(R.layout.activity_main);
 
         try {
-            mBitmap = BitmapFactory.decodeStream(getAssets().open(mTestImages[mImageIndex]));
+            mBitmap = BitmapFactory.decodeStream(getAssets().open("5.JPG"));
         } catch (IOException e) {
             Log.e("Object Detection", "Error reading assets", e);
             finish();
         }
 
         mCountView = findViewById(R.id.countView);
-//        mImageView = findViewById(R.id.imageView);
-//        mImageView.setImageBitmap(mBitmap);
-//        mResultView = findViewById(R.id.resultView);
-//        mResultView.setVisibility(View.INVISIBLE);
+        mTotalView = findViewById(R.id.totalView);
 
         mButtonDetect = findViewById(R.id.detectButton);
         mButtonAdd = findViewById(R.id.addButton);
+        mButtonDiscard = findViewById(R.id.discardButton);
+        mButtonReset = findViewById(R.id.resetButton);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         //Camera Setup
@@ -129,21 +129,27 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
 
+        //Results
+        mResultView = findViewById(R.id.resultView);
+        mResultView.setVisibility(View.INVISIBLE);
+
+
         //OnCLickListeners
         mButtonDetect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mButtonDetect.setEnabled(false);
+                mCamera.takePicture(null, null, mPicture);
                 mProgressBar.setVisibility(ProgressBar.VISIBLE);
                 mButtonDetect.setText(getString(R.string.run_model));
 
                 mImgScaleX = (float)mBitmap.getWidth() / PrePostProcessor.INPUT_WIDTH;
                 mImgScaleY = (float)mBitmap.getHeight() / PrePostProcessor.INPUT_HEIGHT;
 
-                mIvScaleX = (mBitmap.getWidth() > mBitmap.getHeight() ? (float)mImageView.getWidth() / mBitmap.getWidth() : (float)mImageView.getHeight() / mBitmap.getHeight());
-                mIvScaleY  = (mBitmap.getHeight() > mBitmap.getWidth() ? (float)mImageView.getHeight() / mBitmap.getHeight() : (float)mImageView.getWidth() / mBitmap.getWidth());
+                mIvScaleX = (mBitmap.getWidth() > mBitmap.getHeight() ? (float)mPreview.getWidth() / mBitmap.getWidth() : (float)mPreview.getHeight() / mBitmap.getHeight());
+                mIvScaleY  = (mBitmap.getHeight() > mBitmap.getWidth() ? (float)mPreview.getHeight() / mBitmap.getHeight() : (float)mPreview.getWidth() / mBitmap.getWidth());
 
-                mStartX = (mImageView.getWidth() - mIvScaleX * mBitmap.getWidth())/2;
-                mStartY = (mImageView.getHeight() -  mIvScaleY * mBitmap.getHeight())/2;
+                mStartX = (mPreview.getWidth() - mIvScaleX * mBitmap.getWidth())/2;
+                mStartY = (mPreview.getHeight() -  mIvScaleY * mBitmap.getHeight())/2;
 
                 Thread thread = new Thread(MainActivity.this);
                 thread.start();
@@ -152,8 +158,38 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         mButtonAdd.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d("Camera", "Clicked add button");
-                mCamera.takePicture(null, null, mPicture);
+                totalCount += Integer.parseInt((String) mCountView.getText());
+                mCountView.setText("0");
+                mTotalView.setText(String.valueOf(totalCount));
+
+                mCamera.stopPreview();
+                mCamera.startPreview();
+
+                mButtonDetect.setEnabled(true);
+                mButtonDetect.setText(getString(R.string.detect));
+
+                mResultView.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        mButtonDiscard.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mCountView.setText("0");
+
+                mCamera.stopPreview();
+                mCamera.startPreview();
+
+                mButtonDetect.setEnabled(true);
+                mButtonDetect.setText(getString(R.string.detect));
+
+                mResultView.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        mButtonReset.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                totalCount = 0;
+                mTotalView.setText(String.valueOf(totalCount));
             }
         });
 
@@ -220,17 +256,20 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             final String stringCount = String.valueOf(count);
 
             runOnUiThread(() -> {
-                mButtonDetect.setEnabled(true);
-                mButtonDetect.setText(getString(R.string.detect));
+//                mButtonDetect.setEnabled(true);
+//                mButtonDetect.setText(getString(R.string.detect));
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
                 //Count
                 mCountView.setText(stringCount);
 
+//                mPreview.setVisibility(View.INVISIBLE);
+
                 //Bounding Boxes
-                //mResultView.setResults(results);
-                //mResultView.invalidate();
-                //mResultView.setVisibility(View.VISIBLE);
+                mResultView.setResults(results);
+                mResultView.bringToFront();
+                mResultView.invalidate();
+                mResultView.setVisibility(View.VISIBLE);
             });
         }
     }
@@ -281,8 +320,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 finish();
             }
 
-            mCamera.stopPreview();
-            mCamera.startPreview();
+//            mCamera.stopPreview();
+//            mCamera.startPreview();
         }
     };
 

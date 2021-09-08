@@ -6,5 +6,7 @@
     <string name="running_total">Running Total:</string>
     <string name="current_count">Current Count:</string>
     <string name="add_count">Add Count</string>
+    <string name="discard_count">Discard Count</string>
     <string name="reset_total">Reset Total</string>
+    <string name="default_value">0</string>
 </resources>

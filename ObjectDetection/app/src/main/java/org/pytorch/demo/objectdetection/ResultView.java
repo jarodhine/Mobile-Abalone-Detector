@@ -36,7 +36,7 @@ public class ResultView extends View {
     public ResultView(Context context, AttributeSet attrs){
         super(context, attrs);
         mPaintRectangle = new Paint();
-        mPaintRectangle.setColor(Color.YELLOW);
+        mPaintRectangle.setColor(Color.BLACK);
         mPaintText = new Paint();
     }
 
@@ -46,7 +46,7 @@ public class ResultView extends View {
 
         if (mResults == null) return;
         for (Result result : mResults) {
-            mPaintRectangle.setStrokeWidth(3);
+            mPaintRectangle.setStrokeWidth(5);
             mPaintRectangle.setStyle(Paint.Style.STROKE);
             canvas.drawRect(result.rect, mPaintRectangle);
         }
